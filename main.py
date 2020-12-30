@@ -3,22 +3,25 @@ from OpenGL.GL import glBegin
 from OpenGL.GLUT import *
 from OpenGL.GLU import *
 import math
+import glm
 
 # tamanho da tela
 WINDOW_WIDHT = 1000
 WINDOW_HEIGHT = 1000
 
-# angulo de rotação da camera
-x_angle = 0
-y_angle = 0
-# direção da camera
-dx, dy, dz = 0, 0, -1
-# posição da camera
-X = -5
-Y = 2.5
-Z = 18
+#camera
+cameraPos = glm.vec3(0, 2, 30)
+cameraFront = glm.vec3(0, 0, -1)
+cameraUp = glm.vec3(0, 1, 0)
 
-roll = 0
+#mouse
+firstMouse = True
+yaw = -90
+pitch = 0
+lastX = WINDOW_WIDHT/2
+lastY = WINDOW_HEIGHT/2
+fov = 45
+angle = 0
 
 half_width = WINDOW_WIDHT / 2
 half_height = WINDOW_HEIGHT / 2
@@ -26,18 +29,24 @@ half_height = WINDOW_HEIGHT / 2
 
 
 def display():
-    global X, Z, dx, dy, dz, x_angle, y_angle, mouse_x, mouse_y, roll
+    global X, Z, dx, dy, dz, angle, y_angle, mouse_x, mouse_y, roll
     # limpa cor e buffers de profundidade
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
 
     # reseta transformações
     glLoadIdentity()
 
+    # gluPerspective(glm.radians(fov), WINDOW_WIDHT/WINDOW_HEIGHT, 0.1, 100)
+
     # define camera
     # camx camy camz centerx centery centerz upx upy upz
-    gluLookAt(X, Y, Z,
-              dx, dy, dz,
-              roll + 0, Y, 0)
+    gluLookAt(cameraPos.x, cameraPos.y, cameraPos.z,
+              cameraPos.x + cameraFront.x, cameraPos.y + cameraFront.y, cameraPos.z + cameraFront.z,
+              cameraUp.x, cameraUp.y, cameraUp.z)
+    #fixed cam
+    # gluLookAt(0, 5, 35,
+    #           0, 0, -5,
+    #           0, 1, 0)
 
     # piso
     glColor(0.7, 0.7, 0.7)
@@ -146,43 +155,64 @@ def display():
 
 
 def keyboard_d_keys(key, x, y):
-    global x_angle, X, Z, dx, dy, dz
+    global angle, X, Z, dx, dy, dz, cameraFront, cameraUp, cameraPos
 
     if not isinstance(key, int):
         key = key.decode("utf-8")
 
+    front = glm.vec3()
+    front.x = glm.cos(glm.radians(yaw)) * glm.cos(glm.radians(pitch))
+    front.y = glm.sin(glm.radians(pitch))
+    front.z = glm.sin(glm.radians(yaw)) * glm.cos(glm.radians(pitch))
+
+    cam_speed = 0.2
+
     if key == GLUT_KEY_LEFT:
         print("D_KEYS_L ", key)
-        dx -= 1
+        angle -= cam_speed
+        front.x = glm.sin(angle)
+        front.z = -glm.cos(angle)
     elif key == GLUT_KEY_RIGHT:
         print("D_KEYS_R ", key)
-        dx += 1
+        angle += cam_speed
+        front.x = glm.sin(angle)
+        front.z = -glm.cos(angle)
+        # dx = math.sin(angle)
+        # dz = -math.cos(angle)
     elif key == GLUT_KEY_UP:
         print("D_KEYS_U ", key)
-        dy += 1
+        angle += cam_speed
+        front.y = glm.sin(angle)
+        # front.z = -glm.cos(angle)
     elif key == GLUT_KEY_DOWN:
         print("D_KEYS_D ", key)
-        dy -= 1
+        angle -= cam_speed
+        front.y = glm.sin(angle)
+        # front.z = -glm.cos(angle)
+
+    cameraFront = glm.normalize(front)
 
 
 def keyboard(key, x, y):
-    global x_angle, X, Z, dx, dy, dz, roll
-    fraction = 0.1
+    global angle, X, Z, dx, dy, dz, roll, cameraFront, cameraUp, cameraPos
+
+    cameraSpeed = 1
+
     if not isinstance(key, int):
         key = key.decode("utf-8")
 
     if key == 'w':
         print("KEYBOARD w", key)
-        Z -= 1
+        cameraPos += cameraSpeed * cameraFront
     elif key == 'a':
         print("KEYBOARD a", key)
-        X -= 1
+        cameraPos -= glm.normalize(glm.cross(cameraFront, cameraUp)) * cameraSpeed
     elif key == 's':
         print("KEYBOARD s", key)
-        Z += 1
+        cameraPos -= cameraSpeed * cameraFront
     elif key == 'd':
         print("KEYBOARD d", key)
-        X += 1
+        cameraPos += glm.normalize(glm.cross(cameraFront, cameraUp)) * cameraSpeed
     elif key == 'x':
         print("KEYBOARD x", key)
         roll += 0.5
@@ -212,6 +242,7 @@ def change_side(w, h):
 
 
 def main():
+    global dy
     # inicialização
     glutInit()  # inicia glut
     glutInitDisplayMode(GLUT_DEPTH | GLUT_DOUBLE | GLUT_RGBA)
