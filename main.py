@@ -45,6 +45,36 @@ def draw_floor(x, y, z, width, length):
     glEnd()
 
 def draw_block(x, y, z, width, length, height):
+    draw_wall(x, y, z, x, y + height, z+length)
+    draw_wall(x, y, z, x+width, y + height, z)
+    draw_wall(x+width, y, z, x + width, y + height, z + length)
+    draw_wall(x, y, z+length, x + width, y + height, z + length)
+    draw_floor(x, y, z, width, length)
+    draw_floor(x, y+height, z, width, length)
+
+
+def draw_colored_block(x, y, z, width, length, height, front_color, back_color, left_color, right_color, up_color, down_color):
+    #left side
+    glColor3f(left_color.x, left_color.y, left_color.z)
+    draw_wall(x, y, z, x, y + height, z+length)
+    #back side
+    glColor3f(back_color.x, back_color.y, back_color.z)
+    draw_wall(x, y, z, x+width, y + height, z)
+    #right side
+    glColor3f(right_color.x, right_color.y, right_color.z)
+    draw_wall(x+width, y, z, x + width, y + height, z + length)
+    #front side
+    glColor3f(front_color.x, front_color.y, front_color.z)
+    draw_wall(x, y, z+length, x + width, y + height, z + length)
+    #down side
+    glColor3f(down_color.x, down_color.y, down_color.z)
+    draw_floor(x, y, z, width, length)
+    #up side
+    glColor3f(up_color.x, up_color.y, up_color.z)
+    draw_floor(x, y+height, z, width, length)
+
+
+def draw_colored_block_fixed(x, y, z, width, length, height):
     glColor3f(0.293, 0.211, 0.13)
     draw_wall(x, y, z, x, y + height, z+length)
     glColor3f(0.486, 0.293, 0)
@@ -105,14 +135,48 @@ def draw_cylinder(x, y, z, radius, height):
 def draw_bed(x, y, z):
     glPushMatrix()
     glTranslatef(x,y,z)
-    draw_block(0, 0, 0, 5.5, 0.1, 2.5)
-    draw_block(0.5, 0.4, 0.1, 4, 8, 1)
+    #cabeceira da cama
+    draw_colored_block(0, 0, 0, 6.2, 0.1, 2.5,
+                       glm.vec3(0.8, 0.8, 0.8), glm.vec3(1, 1, 1),
+                       glm.vec3(0.6, 0.6, 0.6), glm.vec3(1, 1, 1),
+                       glm.vec3(1, 1, 1), glm.vec3(1, 1, 1))
+    draw_colored_block(4.6, 0, 0.1, 0.1, 1, 1.4,
+                       glm.vec3(0.12, 0.12, 0.12), glm.vec3(0.10, 0.10, 0.10),
+                       glm.vec3(0.14, 0.14, 0.14), glm.vec3(0.10, 0.10, 0.10),
+                       glm.vec3(0.10, 0.10, 0.10), glm.vec3(0.10, 0.10, 0.10))
+    draw_colored_block(4.65, 1.3, 0.1, 1.3, 1, 0.1,
+                       glm.vec3(0.12, 0.12, 0.12), glm.vec3(0.10, 0.10, 0.10),
+                       glm.vec3(0.14, 0.14, 0.14), glm.vec3(0.10, 0.10, 0.10),
+                       glm.vec3(0.10, 0.10, 0.10), glm.vec3(0.10, 0.10, 0.10))
+    draw_colored_block(4.65, 0.7, 0.1, 1.3, 1, 0.1,
+                       glm.vec3(0.12, 0.12, 0.12), glm.vec3(0.10, 0.10, 0.10),
+                       glm.vec3(0.14, 0.14, 0.14), glm.vec3(0.10, 0.10, 0.10),
+                       glm.vec3(0.10, 0.10, 0.10), glm.vec3(0.10, 0.10, 0.10))
+    draw_colored_block(4.65, 0.2, 0.1, 1.3, 1, 0.1,
+                       glm.vec3(0.12, 0.12, 0.12), glm.vec3(0.10, 0.10, 0.10),
+                       glm.vec3(0.14, 0.14, 0.14), glm.vec3(0.10, 0.10, 0.10),
+                       glm.vec3(0.10, 0.10, 0.10), glm.vec3(0.10, 0.10, 0.10))
+    #cama
+    draw_colored_block(0.5, 0.4, 0.1, 4, 8, 0.5,
+                       glm.vec3(0.8, 0.8, 0.8), glm.vec3(1, 1, 1),
+                       glm.vec3(0.6, 0.6, 0.6), glm.vec3(1, 1, 1),
+                       glm.vec3(1, 1, 1), glm.vec3(1, 1, 1))
+
+    #colchão
+    glColor3f(0.212, 0.205, 0.205)
+    draw_block(0.5, 0.9, 0.1, 4, 8, 0.6)
+    #pés da cama
+    glColor3f(0.18, 0.16, 0.16)
     draw_cylinder(0.5+0.2, 0, 0.2, 0.1, 0.4)
     draw_cylinder(0.5+0.2, 0, 4, 0.1, 0.4)
     draw_cylinder(0.5+0.2, 0, 7.8, 0.1, 0.4)
     draw_cylinder(0.5+3.8, 0, 0.2, 0.1, 0.4)
     draw_cylinder(0.5+3.8, 0, 7.8, 0.1, 0.4)
     glPopMatrix()
+
+
+def draw_wardrobe(x, y, z):
+    x = 0
 
 
 def display():
@@ -134,94 +198,64 @@ def display():
     #           0, 1, 0)
 
 
-
+    glPushMatrix()
     # piso
     glColor(0.7, 0.7, 0.7)
-    glBegin(GL_QUADS)
-    glVertex3f(-10, 0, -10)
-    glVertex3f(-10, 0, 10)
-    glVertex3f(10, 0, 10)
-    glVertex3f(10, 0, -10)
-    glEnd()
-
-
-    # parede1
+    draw_floor(-10, 0, -10, 20, 20)
+    # parede de trás
     glColor3f(0.9294, 0.9216, 0.8353)
-    glBegin(GL_QUADS)
-    glVertex3f(-10, 0, -10)
-    glVertex3f(-10, 7, -10)
-    glVertex3f(10, 7, -10)
-    glVertex3f(10, 0, -10)
-    glEnd()
+    draw_wall(-10, 0, -10, 10, 7, -10)
+    # parede esquerda
+    glColor3ub(181, 177, 163)
+    draw_wall(-10, 0, -10, -10, 7, 10)
 
-    # parede2
+    # parede da frente com portas e janelas
     glColor3f(1, 0.851, 0.702)
-    glBegin(GL_QUADS)
-    glVertex3f(-10, 0, -10)
-    glVertex3f(-10, 7, -10)
-    glVertex3f(-10, 7, 10)
-    glVertex3f(-10, 0, 10)
-    glEnd()
+    #part1
+    draw_block(-10, 0, 10, 2, 0.4, 7)
+    # part 2
+    draw_block(-8, 5, 10, 3, 0.4, 2)
+    # part3
+    draw_block(-5, 0, 10, 2, 0.4, 7)
+    # part4
+    draw_block(-3, 6, 10, 13, 0.4, 1)
+    # part5
+    draw_block(-3, 0, 10, 4, 0.4, 5)
+    # part6
+    draw_block(1, 0, 10, 3, 0.4, 6)
+    # part7
+    draw_block(4, 5, 10, 6, 0.4, 1)
+    # part8
+    draw_block(4, 0, 10, 3, 0.4, 4)
+    # part9
+    draw_block(7, 0, 10, 3, 0.4, 5)
 
-    # parede3 com porta
-    glColor3f(1, 0.851, 0.702)
-    glBegin(GL_QUADS)
-    glVertex3f(-10, 0, 10)
-    glVertex3f(-10, 7, 10)
-    glVertex3f(-6, 7, 10)
-    glVertex3f(-6, 0, 10)
-    glEnd()
+    # #alisais
+    # glColor3f(0.4, 0.2, 0)
+    # glLineWidth(30)
+    # # linha de cima porta
+    # glBegin(GL_LINES)
+    # glVertex3f(-6, 5, 10.01)
+    # glVertex3f(-3, 5, 10.01)
+    # glEnd()
+    # # linha esquerda porta
+    # glBegin(GL_LINES)
+    # glVertex3f(-6, 5, 10.01)
+    # glVertex3f(-6, 0, 10.01)
+    # glEnd()
+    # # linha direita porta
+    # glBegin(GL_LINES)
+    # glVertex3f(-3, 0, 10.01)
+    # glVertex3f(-3, 5, 10.01)
+    # glEnd()
 
-    glColor3f(1, 0.851, 0.702)
-    glBegin(GL_QUADS)
-    glVertex3f(-3, 0, 10)
-    glVertex3f(-3, 7, 10)
-    glVertex3f(10, 7, 10)
-    glVertex3f(10, 0, 10)
-    glEnd()
-
-    glColor3f(1, 0.851, 0.702)
-    glBegin(GL_QUADS)
-    glVertex3f(-6, 7, 10)
-    glVertex3f(-6, 5, 10)
-    glVertex3f(-3, 5, 10)
-    glVertex3f(-3, 7, 10)
-    glEnd()
-
-    glColor3f(0.4, 0.2, 0)
-    glLineWidth(30)
-    glBegin(GL_LINES)
-    glVertex3f(-6, 5, 10.01)
-    glVertex3f(-3, 5, 10.01)
-    glEnd()
-
-    glBegin(GL_LINES)
-    glVertex3f(-6, 5, 10.01)
-    glVertex3f(-6, 0, 10.01)
-    glEnd()
-
-    glBegin(GL_LINES)
-    glVertex3f(-3, 0, 10.01)
-    glVertex3f(-3, 5, 10.01)
-    glEnd()
-
-    # parede4
-    glColor3f(1, 0.851, 0.702)
-    glBegin(GL_QUADS)
-    glVertex3f(10, 0, -10)
-    glVertex3f(10, 7, -10)
-    glVertex3f(10, 7, 10)
-    glVertex3f(10, 0, 10)
-    glEnd()
+    # parede direita
+    glColor3ub(201, 197, 183)
+    draw_wall(10, 0, -10, 10, 7, 10)
 
     # teto
-    glColor3f(0.95, 0.95, 0.95)
-    glBegin(GL_QUADS)
-    glVertex3f(-10, 7, -10)
-    glVertex3f(10, 7, -10)
-    glVertex3f(10, 7, 10)
-    glVertex3f(-10, 7, 10)
-    glEnd()
+    glColor3ub(181, 179, 174)
+    draw_floor(-10, 7, -10, 20, 20)
 
     #padrão do piso
     glColor3f(0.149, 0.149, 0.149)
@@ -236,9 +270,17 @@ def display():
         glVertex3f(-10, 0.001, -10.01 + i)
         glVertex3f(10, 0.001, -10.01 + i)
         glEnd()
+    glPopMatrix()
 
 
-    draw_bed(-9, 0, -9)
+    draw_bed(-6, 0, -9)
+
+    draw_colored_block(0, 5, 0, 1, 1, 1,
+                            glm.vec3(0, 1, 0), glm.vec3(0, 0, 1),
+                            glm.vec3(1, 0, 0), glm.vec3(1, 1, 1),
+                            glm.vec3(0.5, 0.5, 0), glm.vec3(0, 0, 0))
+
+    draw_colored_block_fixed(0, 2, 0, 1, 1, 1)
 
     glutSwapBuffers()
 
@@ -302,10 +344,10 @@ def keyboard(key, x, y):
         cameraPos += glm.normalize(glm.cross(cameraFront, cameraUp)) * cameraSpeed
     elif key == 'q':
         print("KEYBOARD q", key)
-        cameraPos.y += cameraSpeed
+        cameraPos.y += cameraSpeed/2
     elif key == 'e':
         print("KEYBOARD e", key)
-        cameraPos.y -= cameraSpeed
+        cameraPos.y -= cameraSpeed/2
     glutPostRedisplay()
 
 
