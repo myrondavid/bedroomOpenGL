@@ -27,6 +27,94 @@ half_width = WINDOW_WIDHT / 2
 half_height = WINDOW_HEIGHT / 2
 
 
+def draw_wall(x0, y0, z0, x1, y1, z1):
+    glBegin(GL_QUADS)
+    glVertex3f(x0, y0, z0)
+    glVertex3f(x1, y0, z1)
+    glVertex3f(x1, y1, z1)
+    glVertex3f(x0, y1, z0)
+    glEnd()
+
+
+def draw_floor(x, y, z, width, length):
+    glBegin(GL_QUADS)
+    glVertex3f(x, y, z)
+    glVertex3f(x, y, z + length)
+    glVertex3f(x + width, y, z + length)
+    glVertex3f(x + width, y, z)
+    glEnd()
+
+def draw_block(x, y, z, width, length, height):
+    glColor3f(0.293, 0.211, 0.13)
+    draw_wall(x, y, z, x, y + height, z+length)
+    glColor3f(0.486, 0.293, 0)
+    draw_wall(x, y, z, x+width, y + height, z)
+    draw_wall(x+width, y, z, x + width, y + height, z + length)
+    glColor3f(0.36, 0.2, 0.09)
+    draw_wall(x, y, z+length, x + width, y + height, z + length)
+    draw_floor(x, y, z, width, length)
+    glColor3f(0.37, 0.15, 0.07)
+    draw_floor(x, y+height, z, width, length)
+
+
+def draw_cylinder(x, y, z, radius, height):
+    px = 0
+    pz = 0
+    c_angle = 0
+    angle_stepsize = 0.1
+
+    glBegin(GL_QUAD_STRIP)
+    c_angle = 0
+    while c_angle < 2*glm.pi() + 1:
+        px = radius * glm.cos(c_angle)
+        pz = radius * glm.sin(c_angle)
+        glVertex3f(x + px, y + height, z + pz)
+        glVertex3f(x + px, y, z + pz)
+        c_angle += angle_stepsize
+    glEnd()
+
+    glBegin(GL_POLYGON)
+    c_angle = 0
+    while c_angle < 2*glm.pi():
+        px = radius * glm.cos(c_angle)
+        pz = radius * glm.sin(c_angle)
+        glVertex3f(x + px, y + height, z + pz)
+        c_angle += angle_stepsize
+    glEnd()
+
+    glBegin(GL_POLYGON)
+    c_angle = 0
+    while c_angle < 2*glm.pi():
+        px = radius * glm.cos(c_angle)
+        pz = radius * glm.sin(c_angle)
+        glVertex3f(x + px, y + height, z + pz)
+        c_angle += angle_stepsize
+    glEnd()
+
+    glBegin(GL_POLYGON)
+    c_angle = 0
+    while c_angle < 2 * glm.pi():
+        px = radius * glm.cos(c_angle)
+        pz = radius * glm.sin(c_angle)
+        glVertex3f(x + px, y, z + pz)
+        c_angle += angle_stepsize
+    glEnd()
+
+
+
+def draw_bed(x, y, z):
+    glPushMatrix()
+    glTranslatef(x,y,z)
+    draw_block(0, 0, 0, 5.5, 0.1, 2.5)
+    draw_block(0.5, 0.4, 0.1, 4, 8, 1)
+    draw_cylinder(0.5+0.2, 0, 0.2, 0.1, 0.4)
+    draw_cylinder(0.5+0.2, 0, 4, 0.1, 0.4)
+    draw_cylinder(0.5+0.2, 0, 7.8, 0.1, 0.4)
+    draw_cylinder(0.5+3.8, 0, 0.2, 0.1, 0.4)
+    draw_cylinder(0.5+3.8, 0, 7.8, 0.1, 0.4)
+    glPopMatrix()
+
+
 def display():
     global angle
     # limpa cor e buffers de profundidade
@@ -45,7 +133,7 @@ def display():
     #           0, 0, -5,
     #           0, 1, 0)
 
-    # draw_ppd()
+
 
     # piso
     glColor(0.7, 0.7, 0.7)
@@ -149,11 +237,14 @@ def display():
         glVertex3f(10, 0.001, -10.01 + i)
         glEnd()
 
+
+    draw_bed(-9, 0, -9)
+
     glutSwapBuffers()
 
 
 
-def keyboard_d_keys(key, x, y):
+def keyboard_d_keys(key, dx, y):
     global angle, cameraFront, cameraUp, cameraPos
 
     if not isinstance(key, int):
@@ -209,12 +300,12 @@ def keyboard(key, x, y):
     elif key == 'd':
         print("KEYBOARD d", key)
         cameraPos += glm.normalize(glm.cross(cameraFront, cameraUp)) * cameraSpeed
-    elif key == 'x':
-        print("KEYBOARD x", key)
-        roll += 0.5
-    elif key == 'z':
-        print("KEYBOARD z", key)
-        roll -= 0.5
+    elif key == 'q':
+        print("KEYBOARD q", key)
+        cameraPos.y += cameraSpeed
+    elif key == 'e':
+        print("KEYBOARD e", key)
+        cameraPos.y -= cameraSpeed
     glutPostRedisplay()
 
 
