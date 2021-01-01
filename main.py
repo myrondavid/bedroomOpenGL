@@ -3,7 +3,10 @@ from OpenGL.GL import glBegin
 from OpenGL.GLUT import *
 from OpenGL.GLU import *
 import math
+import numpy
 import glm
+from PIL import Image
+import pygame
 
 # tamanho da tela
 WINDOW_WIDHT = 1000
@@ -22,6 +25,8 @@ angle_x = -1.57
 angle_y = 1.57
 mouse_speed = 0.1
 mouse_sensitivity = 0.001
+
+texture_brick = None
 
 half_width = WINDOW_WIDHT / 2
 half_height = WINDOW_HEIGHT / 2
@@ -132,7 +137,7 @@ def draw_cylinder(x, y, z, radius, height):
 
 
 
-def draw_bed(x, y, z):
+def draw_bed1(x, y, z):
     glPushMatrix()
     glTranslatef(x,y,z)
     #cabeceira da cama
@@ -161,7 +166,6 @@ def draw_bed(x, y, z):
                        glm.vec3(0.8, 0.8, 0.8), glm.vec3(1, 1, 1),
                        glm.vec3(0.6, 0.6, 0.6), glm.vec3(1, 1, 1),
                        glm.vec3(1, 1, 1), glm.vec3(1, 1, 1))
-
     #colchão
     glColor3f(0.212, 0.205, 0.205)
     draw_block(0.5, 0.9, 0.1, 4, 8, 0.6)
@@ -175,8 +179,100 @@ def draw_bed(x, y, z):
     glPopMatrix()
 
 
+def draw_bed2(x, y, z):
+    glPushMatrix()
+    glTranslatef(x,y,z)
+    #cama
+    draw_colored_block(0.5, 0.4, 0.1, 4, 8, 0.5,
+                       glm.vec3(0.8, 0.8, 0.8), glm.vec3(1, 1, 1),
+                       glm.vec3(0.6, 0.6, 0.6), glm.vec3(1, 1, 1),
+                       glm.vec3(1, 1, 1), glm.vec3(1, 1, 1))
+    #colchão
+    glColor3f(0.212, 0.205, 0.205)
+    draw_block(0.5, 0.9, 0.1, 4, 8, 0.6)
+    #pés da cama
+    glColor3f(0.18, 0.16, 0.16)
+    draw_cylinder(0.5+0.2, 0, 0.2, 0.1, 0.4)
+    draw_cylinder(0.5+0.2, 0, 4, 0.1, 0.4)
+    draw_cylinder(0.5+0.2, 0, 7.8, 0.1, 0.4)
+    draw_cylinder(0.5+3.8, 0, 0.2, 0.1, 0.4)
+    draw_cylinder(0.5+3.8, 0, 7.8, 0.1, 0.4)
+    glPopMatrix()
+
 def draw_wardrobe(x, y, z):
-    x = 0
+    glPushMatrix()
+    glTranslatef(x, y, z)
+    draw_colored_block(0, 0, 0, 2.5, 12, 5,
+                       glm.vec3(0.8, 0.8, 0.8), glm.vec3(1, 1, 1),
+                       glm.vec3(0.6, 0.6, 0.6), glm.vec3(1, 1, 1),
+                       glm.vec3(1, 1, 1), glm.vec3(1, 1, 1))
+    glPopMatrix()
+
+
+def draw_dresser(x, y, z):
+    glPushMatrix()
+    glTranslatef(x, y, z)
+
+    # pés
+    glColor3f(0.18, 0.16, 0.16)
+    draw_cylinder(0.2, 0, 0.2, 0.1, 0.2)
+    draw_cylinder(0.2, 0, 1.8, 0.1, 0.2)
+    draw_cylinder(4.8, 0, 0.2, 0.1, 0.2)
+    draw_cylinder(4.8, 0, 1.8, 0.1, 0.2)
+    #base
+    draw_colored_block(0, 0.2, 0, 5, 2, 0.1,
+                       glm.vec3(0.8, 0.8, 0.8), glm.vec3(1, 1, 1),
+                       glm.vec3(0.6, 0.6, 0.6), glm.vec3(1, 1, 1),
+                       glm.vec3(1, 1, 1), glm.vec3(1, 1, 1))
+    #gavetas
+    draw_colored_block(0.2, 0.3, 0.2, 2, 1.6, 2.5,
+                       glm.vec3(0.8, 0.8, 0.8), glm.vec3(1, 1, 1),
+                       glm.vec3(0.6, 0.6, 0.6), glm.vec3(1, 1, 1),
+                       glm.vec3(1, 1, 1), glm.vec3(1, 1, 1))
+    #armarinho
+    draw_colored_block(1.8, 0.3, 0.2, 3, 1.6, 1.6,
+                       glm.vec3(0.8, 0.8, 0.8), glm.vec3(1, 1, 1),
+                       glm.vec3(0.6, 0.6, 0.6), glm.vec3(1, 1, 1),
+                       glm.vec3(1, 1, 1), glm.vec3(1, 1, 1))
+    #pedaço do lado
+    draw_colored_block(4.7, 1.9, 0.2, 0.1, 1.6, 0.9,
+                       glm.vec3(0.8, 0.8, 0.8), glm.vec3(1, 1, 1),
+                       glm.vec3(0.6, 0.6, 0.6), glm.vec3(1, 1, 1),
+                       glm.vec3(1, 1, 1), glm.vec3(1, 1, 1))
+    # tampo
+    draw_colored_block(0, 2.7, 0, 5, 2, 0.1,
+                       glm.vec3(0.8, 0.8, 0.8), glm.vec3(1, 1, 1),
+                       glm.vec3(0.6, 0.6, 0.6), glm.vec3(1, 1, 1),
+                       glm.vec3(1, 1, 1), glm.vec3(1, 1, 1))
+
+
+    # tv
+    glPushMatrix()
+    # base tv
+    draw_colored_block(2, 2.8, 0.7, 1, 0.6, 0.1,
+                       glm.vec3(0.1, 0.1, 0.1), glm.vec3(0.1, 0.1, 0.1),
+                       glm.vec3(0.1, 0.1, 0.1), glm.vec3(0.1, 0.1, 0.1),
+                       glm.vec3(0.1, 0.1, 0.1), glm.vec3(0.1, 0.1, 0.1))
+    glColor3ub(23, 22, 20)
+    # pé da base
+    draw_cylinder(2.5, 2.9, 1, 0.1, 0.2)
+    # base tela
+    draw_block(1, 3.1, 0.8, 3, 0.4, 0.1)
+    #lateral esquerda tela
+    draw_block(1, 3.2, 0.8, 0.1, 0.4, 1.5)
+    # lateral direita tela
+    draw_block(3.9, 3.2, 0.8, 0.1, 0.4, 1.5)
+    #topo tela
+    draw_block(1, 4.6, 0.8, 3, 0.4, 0.1)
+    #tela
+    draw_colored_block(1.1, 3.2, 0.9, 2.8, 0.3, 1.4,
+                       glm.vec3(0.3, 0.3, 0.3), glm.vec3(23/255, 22/255, 20/255),
+                       glm.vec3(0.1, 0.1, 0.1), glm.vec3(0.1, 0.1, 0.1),
+                       glm.vec3(0.1, 0.1, 0.1), glm.vec3(0.1, 0.1, 0.1))
+    glPopMatrix()
+
+
+    glPopMatrix()
 
 
 def display():
@@ -202,9 +298,18 @@ def display():
     # piso
     glColor(0.7, 0.7, 0.7)
     draw_floor(-10, 0, -10, 20, 20)
+
     # parede de trás
-    glColor3f(0.9294, 0.9216, 0.8353)
+    glPushMatrix()
+    glEnable(GL_TEXTURE_2D)
+    glBindTexture(GL_TEXTURE_2D, texture_brick)
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    # glColor3f(0.9294, 0.9216, 0.8353)# target, texture
     draw_wall(-10, 0, -10, 10, 7, -10)
+    glDisable(GL_TEXTURE_2D)
+    glPopMatrix()
+
     # parede esquerda
     glColor3ub(181, 177, 163)
     draw_wall(-10, 0, -10, -10, 7, 10)
@@ -230,29 +335,17 @@ def display():
     # part9
     draw_block(7, 0, 10, 3, 0.4, 5)
 
-    # #alisais
-    # glColor3f(0.4, 0.2, 0)
-    # glLineWidth(30)
-    # # linha de cima porta
-    # glBegin(GL_LINES)
-    # glVertex3f(-6, 5, 10.01)
-    # glVertex3f(-3, 5, 10.01)
-    # glEnd()
-    # # linha esquerda porta
-    # glBegin(GL_LINES)
-    # glVertex3f(-6, 5, 10.01)
-    # glVertex3f(-6, 0, 10.01)
-    # glEnd()
-    # # linha direita porta
-    # glBegin(GL_LINES)
-    # glVertex3f(-3, 0, 10.01)
-    # glVertex3f(-3, 5, 10.01)
-    # glEnd()
+    # alisais esquerdo
+    draw_colored_block_fixed(-8, 0, 10, 0.1, 0.4, 5)
+    # alisais direito
+    draw_colored_block_fixed(-5.1, 0, 10, 0.1, 0.4, 5)
+    # alisais topo
+    draw_colored_block_fixed(-7.9, 4.9, 10, 2.8, 0.4, 0.1)
+
 
     # parede direita
     glColor3ub(201, 197, 183)
     draw_wall(10, 0, -10, 10, 7, 10)
-
     # teto
     glColor3ub(181, 179, 174)
     draw_floor(-10, 7, -10, 20, 20)
@@ -273,14 +366,24 @@ def display():
     glPopMatrix()
 
 
-    draw_bed(-6, 0, -9)
+    draw_bed1(-6, 0, -9.99)
+    draw_bed2(5.3, 0, -9.99)
+    draw_wardrobe(-9.99, 0, -9.99)
 
-    draw_colored_block(0, 5, 0, 1, 1, 1,
-                            glm.vec3(0, 1, 0), glm.vec3(0, 0, 1),
-                            glm.vec3(1, 0, 0), glm.vec3(1, 1, 1),
-                            glm.vec3(0.5, 0.5, 0), glm.vec3(0, 0, 0))
+    glPushMatrix()
+    glTranslatef(4, 0, 9.99)
+    glRotatef(180, 0, 1, 0)
+    draw_dresser(0, 0, 0)
+    glPopMatrix()
 
-    draw_colored_block_fixed(0, 2, 0, 1, 1, 1)
+    glPushMatrix()
+
+    glScalef(0.6, 1, 0.3)
+    glTranslatef(16.2, 0, 33)
+    glRotatef(180, 0, 1, 0)
+    draw_wardrobe(0,0,0)
+    glPopMatrix()
+
 
     glutSwapBuffers()
 
@@ -399,23 +502,64 @@ def mouse_camera(mouse_x, mouse_y):
     glutPostRedisplay()
 
 
+def load_texture(img_filename):
+    textureSurface = pygame.image.load(img_filename)
+    textureData = pygame.image.tostring(textureSurface,"RGBA",1)
+    width = textureSurface.get_width()
+    height = textureSurface.get_height()
+
+    texid = glGenTextures(1)
+
+    glBindTexture(GL_TEXTURE_2D, texid)
+    glPixelStorei(GL_UNPACK_ALIGNMENT, 1)
+
+    # glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_MIRRORED_REPEAT)  # repeat in s when done, if needed
+    # glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_MIRRORED_REPEAT)  # repeat in t when done, if needed
+    # # glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE)  # repeat in s when done, if needed
+    # # glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE)  # repeat in t when done, if needed
+    # glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR)  # how to upsample?
+    # # glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR)  # how to downsample?
+    # glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR)  # how to upsample?
+
+    glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE)
+
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, textureData)
+
+    glGenerateMipmap(GL_TEXTURE_2D)
+
+    return texid
+
+def load_texture_test(image):
+    textureSurface = pygame.image.load(image)
+    textureData = pygame.image.tostring(textureSurface, "RGBA", 1)
+    width = textureSurface.get_width()
+    height = textureSurface.get_height()
+
+    texid = glGenTextures(1)
+    glBindTexture(GL_TEXTURE_2D, texid)
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, textureData)
+
+    return texid
+
 def main():
-    global dy
+    global texture_brick
     # inicialização
     glutInit()  # inicia glut
     glutInitDisplayMode(GLUT_DEPTH | GLUT_DOUBLE | GLUT_RGBA)
     glutInitWindowPosition(0, 0)
     glutInitWindowSize(WINDOW_WIDHT, WINDOW_HEIGHT)
-    window = glutCreateWindow("Bedroom")
+    window = glutCreateWindow("Myron's Bedroom")
 
+    #callbacks
     glutDisplayFunc(display)
     glutReshapeFunc(change_side)
     glutKeyboardFunc(keyboard)
     glutSpecialFunc(keyboard_d_keys)
-
     glutMouseFunc(mouse_click)
     glutMotionFunc(mouse_camera)
 
+    #textures
+    texture_brick = load_texture("textures/wall.png")
 
     glEnable(GL_DEPTH_TEST)
 
