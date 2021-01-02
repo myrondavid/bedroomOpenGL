@@ -2,10 +2,8 @@ from OpenGL.GL import *
 from OpenGL.GL import glBegin
 from OpenGL.GLUT import *
 from OpenGL.GLU import *
-import math
-import numpy
 import glm
-from PIL import Image
+
 import pygame
 
 # tamanho da tela
@@ -35,9 +33,13 @@ textures = {
     'gavetas_comoda': None,
     'portas_comoda': None,
     'teto': None,
-    'parede': None
+    'parede': None,
+    'quadro1': None,
+    'quadro2': None,
+    'miro': None
 }
 
+fan_rotation = 0
 
 half_width = WINDOW_WIDHT / 2
 half_height = WINDOW_HEIGHT / 2
@@ -362,8 +364,107 @@ def draw_dresser(x, y, z):
     glPopMatrix()
 
 
+
+def draw_fan_table(x, y, z):
+    glPushMatrix()
+    glTranslatef(x, y, z)
+    glColor3ub(250, 250, 250)
+    #tampo
+    draw_colored_block(0, 1.5, 0, 3, 2, 0.1,
+                       glm.vec3(0.8, 0.8, 0.8), glm.vec3(1, 1, 1),
+                       glm.vec3(0.6, 0.6, 0.6), glm.vec3(1, 1, 1),
+                       glm.vec3(1, 1, 1), glm.vec3(1, 1, 1))
+    #pé esquerdo trás
+    draw_colored_block(0, 0, 0, 0.3, 0.1, 1.5,
+                       glm.vec3(0.8, 0.8, 0.8), glm.vec3(1, 1, 1),
+                       glm.vec3(0.6, 0.6, 0.6), glm.vec3(1, 1, 1),
+                       glm.vec3(1, 1, 1), glm.vec3(1, 1, 1))
+    draw_colored_block(0, 0, 0, 0.1, 0.3, 1.5,
+                       glm.vec3(0.8, 0.8, 0.8), glm.vec3(1, 1, 1),
+                       glm.vec3(0.6, 0.6, 0.6), glm.vec3(1, 1, 1),
+                       glm.vec3(1, 1, 1), glm.vec3(1, 1, 1))
+    #pé esquerdo frente
+    glPushMatrix()
+    glTranslatef(0, 0, 2)
+    glRotatef(90, 0, 1, 0)
+    draw_colored_block(0, 0, 0, 0.3, 0.1, 1.5,
+                       glm.vec3(0.8, 0.8, 0.8), glm.vec3(1, 1, 1),
+                       glm.vec3(0.6, 0.6, 0.6), glm.vec3(1, 1, 1),
+                       glm.vec3(1, 1, 1), glm.vec3(1, 1, 1))
+    draw_colored_block(0, 0, 0, 0.1, 0.3, 1.5,
+                       glm.vec3(0.8, 0.8, 0.8), glm.vec3(1, 1, 1),
+                       glm.vec3(0.6, 0.6, 0.6), glm.vec3(1, 1, 1),
+                       glm.vec3(1, 1, 1), glm.vec3(1, 1, 1))
+    glPopMatrix()
+    #pé direito trás
+    glPushMatrix()
+    glTranslatef(3, 0, 0)
+    glRotatef(270, 0, 1, 0)
+    draw_colored_block(0, 0, 0, 0.3, 0.1, 1.5,
+                       glm.vec3(0.8, 0.8, 0.8), glm.vec3(1, 1, 1),
+                       glm.vec3(0.6, 0.6, 0.6), glm.vec3(1, 1, 1),
+                       glm.vec3(1, 1, 1), glm.vec3(1, 1, 1))
+    draw_colored_block(0, 0, 0, 0.1, 0.3, 1.5,
+                       glm.vec3(0.8, 0.8, 0.8), glm.vec3(1, 1, 1),
+                       glm.vec3(0.6, 0.6, 0.6), glm.vec3(1, 1, 1),
+                       glm.vec3(1, 1, 1), glm.vec3(1, 1, 1))
+    glPopMatrix()
+    #pé direito frente
+    glPushMatrix()
+    glTranslatef(3, 0, 2)
+    glRotatef(180, 0, 1, 0)
+    draw_colored_block(0, 0, 0, 0.3, 0.1, 1.5,
+                       glm.vec3(0.8, 0.8, 0.8), glm.vec3(1, 1, 1),
+                       glm.vec3(0.6, 0.6, 0.6), glm.vec3(1, 1, 1),
+                       glm.vec3(1, 1, 1), glm.vec3(1, 1, 1))
+    draw_colored_block(0, 0, 0, 0.1, 0.3, 1.5,
+                       glm.vec3(0.8, 0.8, 0.8), glm.vec3(1, 1, 1),
+                       glm.vec3(0.6, 0.6, 0.6), glm.vec3(1, 1, 1),
+                       glm.vec3(1, 1, 1), glm.vec3(1, 1, 1))
+    glPopMatrix()
+
+    glPopMatrix() # fim fan_table
+
+
+def draw_fan(x, y, z, rot):
+    glPushMatrix() #begin fan
+    glTranslatef(x, y, z)
+    glColor3ub(100, 100, 100)
+    draw_cylinder(0, 0, 0, 1, 0.2) # base
+
+    glColor3ub(120, 120, 120)
+    draw_cylinder(0, 0.2, 0, 0.2, 1.5) #haste
+
+    glPushMatrix() # motor + helices
+    glColor3ub(80, 80, 80)
+    glTranslatef(0, 1.7, -2)
+    glRotatef(90, 1, 0, 0)
+    draw_cylinder(0, 1.7, 0, 0.4, 0.8) #motor
+    glColor3ub(10, 10, 10)
+    draw_cylinder(0, 2.5, 0, 0.05, 0.1)  # haste helices
+
+    glRotatef(-rot, 0, 1, 0) #<<<<ISSO AQUI RODA O VENLILADOR
+    glPushMatrix() #push helices
+    glColor3ub(100, 100, 100)
+    draw_cylinder(0, 2.6, 0, 0.3, 0.2)  # centro helices
+    glColor3ub(130, 130, 130)
+    glPushMatrix()
+    glScalef(2, 1, 1)
+    draw_cylinder(-0.45, 2.7, 0, 0.3, 0.03)# helice 1
+    draw_cylinder(0.45, 2.7, 0, 0.3, 0.03)  # helice 2
+    glPopMatrix()
+    glScalef(1, 1, 2)
+    draw_cylinder(0, 2.7, 0.45, 0.3, 0.03)  # helice 3
+    draw_cylinder(0, 2.7, -0.45, 0.3, 0.03)   # helice 4
+    glPopMatrix() #pop helices
+    glutPostRedisplay()
+    glPopMatrix() #pop motor
+    # glutPostRedisplay()
+    glPopMatrix() #end fan
+
+
 def display():
-    global angle, texture_brick
+    global angle, texture_brick, fan_rotation
     # limpa cor e buffers de profundidade
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
 
@@ -381,28 +482,21 @@ def display():
     #           0, 1, 0)
 
 
-    glPushMatrix()
+    glPushMatrix() # push quarto
     # piso
     glColor(1, 1, 1)
     draw_textured_floor(-10, 0, -10, 20, 20, textures['ceramica'])
 
-    #teste parede com textura
-    draw_textured_wall(-10, 0, -20, 10, 7, -20, textures['brick'])
-    draw_textured_floor(-10, 0, -20, 10, 5, textures['ceramica'])
-
     # parede de trás
-    # glColor3f(0.9294, 0.9294, 0.9294)
     glColor3ub(255, 255, 255)
     draw_textured_wall(-10, 0, -10, 10, 7, -10, textures['parede'])
-    # draw_wall(-10, 0, -10, 10, 7, -10)
 
     # parede esquerda
     glColor3ub(181, 177, 163)
-    # draw_wall(-10, 0, -10, -10, 7, 10)
     draw_textured_wall(-10, 0, -10, -10, 7, 10, textures['parede'])
 
     # parede da frente com portas e janelas
-    glColor3f(1, 0.851, 0.702)
+    glColor3ub(200, 200, 200)
     #part1
     draw_block(-10, 0, 10, 2, 0.4, 7)
     # part 2
@@ -432,27 +526,12 @@ def display():
     # parede direita
     glColor3ub(201, 197, 183)
     draw_textured_wall(10, 0, -10, 10, 7, 10, textures['parede'])
-    # draw_wall(10, 0, -10, 10, 7, 10)
 
     # teto
     glColor3ub(250, 250, 250)
-    # draw_floor(-10, 7, -10, 20, 20)
     draw_textured_floor(-10, 7, -10, 20, 20, textures['teto'])
 
-    #padrão do piso
-    # glColor3f(0.149, 0.149, 0.149)
-    # glLineWidth(3)
-    # for i in range(0, 20, 2):
-    #     glBegin(GL_LINES)
-    #     glVertex3f(-10 + i, 0.001, -10.01)
-    #     glVertex3f(-10 + i, 0.001, 10.01)
-    #     glEnd()
-    # for i in range(0, 20, 2):
-    #     glBegin(GL_LINES)
-    #     glVertex3f(-10, 0.001, -10.01 + i)
-    #     glVertex3f(10, 0.001, -10.01 + i)
-    #     glEnd()
-    glPopMatrix()
+    glPopMatrix() #pop quarto
 
     #cama 1 com cabeceira
     draw_bed1(-6, 0, -9.99)
@@ -461,7 +540,6 @@ def display():
 
     #guarda-roupas grande
     draw_wardrobe(-9.99, 0, -9.99)
-
 
     #comoda e tv
     glPushMatrix()
@@ -478,8 +556,38 @@ def display():
     draw_wardrobe(0,0,0)
     glPopMatrix()
 
+    #quadro van gogh
+    glPushMatrix()
+    glColor3ub(255, 255, 255)
+    draw_texturized_block_front(2, 4, -9.99, 3, 0.05, 2, textures['quadro1'])
+    glPopMatrix()
+
+    #quadro miro
+    glPushMatrix()
+    glColor3ub(255, 255, 255)
+    draw_texturized_block_front(-4, 4, -9.99, 2, 0.05, 2, textures['miro'])
+    glColor3ub(50, 50, 50)
+    draw_block(-4.1, 3.9, -9.99, 0.1, 0.1, 2.2)#left
+    draw_block(-2, 3.9, -9.99, 0.1, 0.1, 2.2)#down
+    draw_block(-4.1, 3.9, -9.99, 2.1, 0.1, 0.1)#right
+    draw_block(-4.1, 6, -9.99, 2.1, 0.1, 0.1)#up
+    glPopMatrix()
+
+    #mesa do ventilador
+    glPushMatrix()
+    glTranslatef(-1.3, 0, 9.9)
+    glRotatef(180, 0, 1, 0)
+    draw_fan_table(0, 0, 0)
+    glScalef(0.7, 0.7, 0.7)
+    draw_fan(2, 2.3, 1.3, fan_rotation)
+    glPopMatrix()
 
     glutSwapBuffers()
+
+    # incrementa a variavel de rotação do ventilador
+    if fan_rotation >= 360:
+        fan_rotation = 0.0
+    fan_rotation += 3 #velocidade da rotação
 
 
 
@@ -649,6 +757,8 @@ def main():
     textures['portas_comoda'] = load_texture("textures/portas_comoda.png")
     textures['teto'] = load_texture("textures/teto-pvc.png")
     textures['parede'] = load_texture("textures/parede.png")
+    textures['quadro1'] = load_texture("textures/quadro1.png")
+    textures['miro'] = load_texture("textures/classic-miro.jpg")
 
     glutMainLoop()
 
