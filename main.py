@@ -2,8 +2,8 @@ from OpenGL.GL import *
 from OpenGL.GL import glBegin
 from OpenGL.GLUT import *
 from OpenGL.GLU import *
-import glm
 
+import glm
 import pygame
 
 # tamanho da tela
@@ -535,6 +535,20 @@ def draw_notebook(x, y, z):
     glPopMatrix()
 
 
+def draw_chair(x, y, z):
+    glPushMatrix()
+    glTranslatef(x, y, z)
+    #assento
+    draw_colored_block_fixed(0, 1, 0, 1.2, 1, 0.1)
+    #pés
+    draw_colored_block_fixed(0, 0, 0, 0.2, 0.2, 1)
+    draw_colored_block_fixed(1, 0, 0, 0.2, 0.2, 1)
+    draw_colored_block_fixed(0, 0, 0.8, 0.2, 0.2, 1)
+    draw_colored_block_fixed(1, 0, 0.8, 0.2, 0.2, 1)
+    #encosto
+    draw_colored_block_fixed(0, 1.1, 0.9, 1.2, 0.1, 1.5)
+    glPopMatrix()
+
 
 
 def display():
@@ -662,9 +676,9 @@ def display():
     draw_table(1, 0, -9.8)
     #notebook
     draw_notebook(2, 0.1, -9)
+    #cadeira
+    draw_chair(2, 0, -8)
     glPopMatrix()
-
-
 
 
     glutSwapBuffers()
@@ -715,7 +729,7 @@ def keyboard_d_keys(key, dx, y):
 def keyboard(key, x, y):
     global angle, X, Z, dx, dy, dz, roll, cameraFront, cameraUp, cameraPos
 
-    cameraSpeed = 1
+    cameraSpeed = 0.5
 
     if not isinstance(key, int):
         key = key.decode("utf-8")
