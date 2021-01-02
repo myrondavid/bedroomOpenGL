@@ -36,7 +36,9 @@ textures = {
     'parede': None,
     'quadro1': None,
     'quadro2': None,
-    'miro': None
+    'miro': None,
+    'tela_notebook': None,
+    'base_notebook': None
 }
 
 fan_rotation = 0
@@ -115,15 +117,16 @@ def draw_texturized_block_right(x, y, z, width, length, height, texture):
     draw_wall(x, y, z, x, y + height, z+length)
     #back side
     draw_wall(x, y, z, x+width, y + height, z)
-    #right side
-    # draw_wall(x+width, y, z, x + width, y + height, z + length)
-    draw_textured_wall(x+width, y, z, x + width, y + height, z + length, texture)
     #front side
     draw_wall(x, y, z+length, x + width, y + height, z + length)
     #down side
     draw_floor(x, y, z, width, length)
     #up side
     draw_floor(x, y+height, z, width, length)
+    #right side
+    # draw_wall(x+width, y, z, x + width, y + height, z + length)
+    glColor3f(1, 1, 1)
+    draw_textured_wall(x+width, y, z, x + width, y + height, z + length, texture)
 
 def draw_texturized_block_front(x, y, z, width, length, height, texture):
     #left side
@@ -132,12 +135,29 @@ def draw_texturized_block_front(x, y, z, width, length, height, texture):
     draw_wall(x, y, z, x+width, y + height, z)
     #right side
     draw_wall(x+width, y, z, x + width, y + height, z + length)
-    #front side
-    draw_textured_wall(x, y, z+length, x + width, y + height, z + length, texture)
     #down side
     draw_floor(x, y, z, width, length)
     #up side
     draw_floor(x, y+height, z, width, length)
+    # front side
+    glColor3f(1, 1, 1)
+    draw_textured_wall(x, y, z+length, x + width, y + height, z + length, texture)
+
+def draw_texturized_block_up(x, y, z, width, length, height, texture):
+    #left side
+    draw_wall(x, y, z, x, y + height, z+length)
+    #back side
+    draw_wall(x, y, z, x+width, y + height, z)
+    #right side
+    draw_wall(x+width, y, z, x + width, y + height, z + length)
+    #down side
+    draw_floor(x, y, z, width, length)
+    # front side
+    draw_wall(x, y, z+length, x + width, y + height, z + length)
+    #up side
+    glColor3f(1, 1, 1)
+    draw_textured_floor(x, y+height, z, width, length, texture)
+    # draw_floor(x, y+height, z, width, length)
 
 
 def draw_colored_block(x, y, z, width, length, height, front_color, back_color, left_color, right_color, up_color, down_color):
@@ -463,6 +483,60 @@ def draw_fan(x, y, z, rot):
     glPopMatrix() #end fan
 
 
+def draw_table(x, y, z):
+    glPushMatrix()
+    glTranslatef(x, y, z)
+
+    # tampo
+    draw_colored_block(0, 2, 0, 4, 2, 0.1,
+                       glm.vec3(0.8, 0.8, 0.8), glm.vec3(1, 1, 1),
+                       glm.vec3(0.6, 0.6, 0.6), glm.vec3(1, 1, 1),
+                       glm.vec3(0.92, 0.92, 0.92), glm.vec3(1, 1, 1))
+    #lateral esquerda
+    draw_colored_block(0, 0, 0, 0.1, 2, 2,
+                       glm.vec3(0.8, 0.8, 0.8), glm.vec3(1, 1, 1),
+                       glm.vec3(0.6, 0.6, 0.6), glm.vec3(1, 1, 1),
+                       glm.vec3(1, 1, 1), glm.vec3(1, 1, 1))
+    #lateral direita
+    draw_colored_block(3.9, 0, 0, 0.1, 2, 2,
+                       glm.vec3(0.8, 0.8, 0.8), glm.vec3(1, 1, 1),
+                       glm.vec3(0.6, 0.6, 0.6), glm.vec3(1, 1, 1),
+                       glm.vec3(1, 1, 1), glm.vec3(1, 1, 1))
+    #frente
+    draw_colored_block(0.1, 1.8, 1.9, 3.8, 0.1, 0.2,
+                       glm.vec3(0.8, 0.8, 0.8), glm.vec3(1, 1, 1),
+                       glm.vec3(0.6, 0.6, 0.6), glm.vec3(1, 1, 1),
+                       glm.vec3(1, 1, 1), glm.vec3(1, 1, 1))
+
+    glPopMatrix()
+
+
+def draw_notebook(x, y, z):
+    glPushMatrix()
+    glTranslatef(x, y, z)
+    # base
+    # draw_colored_block(0, 2, 0, 1, 0.7, 0.05,
+    #                    glm.vec3(0.45, 0.45, 0.45), glm.vec3(0.4, 0.4, 0.4),
+    #                    glm.vec3(0.4, 0.4, 0.4), glm.vec3(0.2, 0.2, 0.2),
+    #                    glm.vec3(0.3, 0.3, 0.3), glm.vec3(0.4, 0.4, 0.4))
+    glColor3ub(157, 150, 142)
+    draw_texturized_block_up(0, 2, 0, 1, 0.7, 0.05, textures['base_notebook'])
+
+    # tela
+    glTranslatef(0, 0.35, 1.15)
+    glRotatef(-35, 1, 0, 0)
+
+    # draw_colored_block(0, 2.05, -0.0, 1, 0.03, 0.7,
+    #                    glm.vec3(0.45, 0.45, 0.45), glm.vec3(0.4, 0.4, 0.4),
+    #                    glm.vec3(0.4, 0.4, 0.4), glm.vec3(0.2, 0.2, 0.2),
+    #                    glm.vec3(0.3, 0.3, 0.3), glm.vec3(0.4, 0.4, 0.4))
+    glColor3ub(10, 10, 10)
+    draw_texturized_block_front(0, 2.05, -0.0, 1, 0.03, 0.7, textures['tela_notebook'])
+    glPopMatrix()
+
+
+
+
 def display():
     global angle, texture_brick, fan_rotation
     # limpa cor e buffers de profundidade
@@ -581,6 +655,17 @@ def display():
     glScalef(0.7, 0.7, 0.7)
     draw_fan(2, 2.3, 1.3, fan_rotation)
     glPopMatrix()
+
+    #mesa notebook
+    glPushMatrix()
+    #mesa
+    draw_table(1, 0, -9.8)
+    #notebook
+    draw_notebook(2, 0.1, -9)
+    glPopMatrix()
+
+
+
 
     glutSwapBuffers()
 
@@ -759,6 +844,9 @@ def main():
     textures['parede'] = load_texture("textures/parede.png")
     textures['quadro1'] = load_texture("textures/quadro1.png")
     textures['miro'] = load_texture("textures/classic-miro.jpg")
+    textures['tela_notebook'] = load_texture("textures/tela_notebook.png")
+    textures['base_notebook'] = load_texture("textures/base_notebook.png")
+
 
     glutMainLoop()
 
