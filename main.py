@@ -24,6 +24,7 @@ angle_y = 1.57
 mouse_speed = 0.1
 mouse_sensitivity = 0.001
 
+
 #textures
 textures = {
     'brick': None,
@@ -326,10 +327,6 @@ def draw_wardrobe(x, y, z):
     glPushMatrix()
     glTranslatef(x, y, z)
     glColor3ub(250, 250, 250)
-    # draw_colored_block(0, 0, 0, 2.5, 12, 5,
-    #                    glm.vec3(0.8, 0.8, 0.8), glm.vec3(1, 1, 1),
-    #                    glm.vec3(0.6, 0.6, 0.6), glm.vec3(1, 1, 1),
-    #                    glm.vec3(1, 1, 1), glm.vec3(1, 1, 1))
     draw_texturized_block_right(0, 0, 0, 2.5, 12, 5, textures['guardaroupa'])
     glPopMatrix()
 
@@ -350,17 +347,9 @@ def draw_dresser(x, y, z):
                        glm.vec3(0.6, 0.6, 0.6), glm.vec3(1, 1, 1),
                        glm.vec3(1, 1, 1), glm.vec3(1, 1, 1))
     #gavetas
-    # draw_colored_block(0.2, 0.3, 0.2, 2, 1.6, 2.5,
-    #                    glm.vec3(0.8, 0.8, 0.8), glm.vec3(1, 1, 1),
-    #                    glm.vec3(0.6, 0.6, 0.6), glm.vec3(1, 1, 1),
-    #                    glm.vec3(1, 1, 1), glm.vec3(1, 1, 1))
     glColor3ub(250, 250, 250)
     draw_texturized_block_front(0.2, 0.3, 0.2, 2, 1.6, 2.5, textures['gavetas_comoda'])
     #armarinho
-    # draw_colored_block(1.8, 0.3, 0.2, 3, 1.6, 1.6,
-    #                    glm.vec3(0.8, 0.8, 0.8), glm.vec3(1, 1, 1),
-    #                    glm.vec3(0.6, 0.6, 0.6), glm.vec3(1, 1, 1),
-    #                    glm.vec3(1, 1, 1), glm.vec3(1, 1, 1))
     draw_texturized_block_front(2.2, 0.3, 0.2, 2.6, 1.6, 1.6, textures['portas_comoda'])
     #pedaço do lado
     draw_colored_block(4.7, 1.9, 0.2, 0.1, 1.6, 0.9,
@@ -393,12 +382,8 @@ def draw_dresser(x, y, z):
     #topo tela
     draw_block(1, 4.6, 0.8, 3, 0.4, 0.1)
     #tela
-    # draw_colored_block(1.1, 3.2, 0.9, 2.8, 0.3, 1.4,
-    #                    glm.vec3(0.3, 0.3, 0.3), glm.vec3(23/255, 22/255, 20/255),
-    #                    glm.vec3(0.1, 0.1, 0.1), glm.vec3(0.1, 0.1, 0.1),
-    #
-    glColor3ub(255, 255, 255)
-    draw_texturized_block_front(1.1, 3.2, 0.9, 2.8, 0.3, 1.4, textures['ednaldo'])
+    glColor3ub(50, 50, 50)
+    draw_texturized_block_front(1.1, 3.2, 0.8, 2.8, 0.3, 1.4, textures['ednaldo'])
     glPopMatrix()
 
 
@@ -411,57 +396,30 @@ def draw_fan_table(x, y, z):
     glTranslatef(x, y, z)
     glColor3ub(250, 250, 250)
     #tampo
-    draw_colored_block(0, 1.5, 0, 3, 2, 0.1,
-                       glm.vec3(0.8, 0.8, 0.8), glm.vec3(1, 1, 1),
-                       glm.vec3(0.6, 0.6, 0.6), glm.vec3(1, 1, 1),
-                       glm.vec3(1, 1, 1), glm.vec3(1, 1, 1))
+    draw_block(0, 1.5, 0, 3, 2, 0.1)
     #pé esquerdo trás
-    draw_colored_block(0, 0, 0, 0.3, 0.1, 1.5,
-                       glm.vec3(0.8, 0.8, 0.8), glm.vec3(1, 1, 1),
-                       glm.vec3(0.6, 0.6, 0.6), glm.vec3(1, 1, 1),
-                       glm.vec3(1, 1, 1), glm.vec3(1, 1, 1))
-    draw_colored_block(0, 0, 0, 0.1, 0.3, 1.5,
-                       glm.vec3(0.8, 0.8, 0.8), glm.vec3(1, 1, 1),
-                       glm.vec3(0.6, 0.6, 0.6), glm.vec3(1, 1, 1),
-                       glm.vec3(1, 1, 1), glm.vec3(1, 1, 1))
+    draw_block(0, 0, 0, 0.3, 0.1, 1.5)
+    draw_block(0, 0, 0, 0.1, 0.3, 1.5)
     #pé esquerdo frente
     glPushMatrix()
     glTranslatef(0, 0, 2)
     glRotatef(90, 0, 1, 0)
-    draw_colored_block(0, 0, 0, 0.3, 0.1, 1.5,
-                       glm.vec3(0.8, 0.8, 0.8), glm.vec3(1, 1, 1),
-                       glm.vec3(0.6, 0.6, 0.6), glm.vec3(1, 1, 1),
-                       glm.vec3(1, 1, 1), glm.vec3(1, 1, 1))
-    draw_colored_block(0, 0, 0, 0.1, 0.3, 1.5,
-                       glm.vec3(0.8, 0.8, 0.8), glm.vec3(1, 1, 1),
-                       glm.vec3(0.6, 0.6, 0.6), glm.vec3(1, 1, 1),
-                       glm.vec3(1, 1, 1), glm.vec3(1, 1, 1))
+    draw_block(0, 0, 0, 0.3, 0.1, 1.5)
+    draw_block(0, 0, 0, 0.1, 0.3, 1.5)
     glPopMatrix()
     #pé direito trás
     glPushMatrix()
     glTranslatef(3, 0, 0)
     glRotatef(270, 0, 1, 0)
-    draw_colored_block(0, 0, 0, 0.3, 0.1, 1.5,
-                       glm.vec3(0.8, 0.8, 0.8), glm.vec3(1, 1, 1),
-                       glm.vec3(0.6, 0.6, 0.6), glm.vec3(1, 1, 1),
-                       glm.vec3(1, 1, 1), glm.vec3(1, 1, 1))
-    draw_colored_block(0, 0, 0, 0.1, 0.3, 1.5,
-                       glm.vec3(0.8, 0.8, 0.8), glm.vec3(1, 1, 1),
-                       glm.vec3(0.6, 0.6, 0.6), glm.vec3(1, 1, 1),
-                       glm.vec3(1, 1, 1), glm.vec3(1, 1, 1))
+    draw_block(0, 0, 0, 0.3, 0.1, 1.5)
+    draw_block(0, 0, 0, 0.1, 0.3, 1.5)
     glPopMatrix()
     #pé direito frente
     glPushMatrix()
     glTranslatef(3, 0, 2)
     glRotatef(180, 0, 1, 0)
-    draw_colored_block(0, 0, 0, 0.3, 0.1, 1.5,
-                       glm.vec3(0.8, 0.8, 0.8), glm.vec3(1, 1, 1),
-                       glm.vec3(0.6, 0.6, 0.6), glm.vec3(1, 1, 1),
-                       glm.vec3(1, 1, 1), glm.vec3(1, 1, 1))
-    draw_colored_block(0, 0, 0, 0.1, 0.3, 1.5,
-                       glm.vec3(0.8, 0.8, 0.8), glm.vec3(1, 1, 1),
-                       glm.vec3(0.6, 0.6, 0.6), glm.vec3(1, 1, 1),
-                       glm.vec3(1, 1, 1), glm.vec3(1, 1, 1))
+    draw_block(0, 0, 0, 0.3, 0.1, 1.5)
+    draw_block(0, 0, 0, 0.1, 0.3, 1.5)
     glPopMatrix()
 
     glPopMatrix() # fim fan_table
@@ -536,21 +494,12 @@ def draw_notebook(x, y, z):
     glPushMatrix()
     glTranslatef(x, y, z)
     # base
-    # draw_colored_block(0, 2, 0, 1, 0.7, 0.05,
-    #                    glm.vec3(0.45, 0.45, 0.45), glm.vec3(0.4, 0.4, 0.4),
-    #                    glm.vec3(0.4, 0.4, 0.4), glm.vec3(0.2, 0.2, 0.2),
-    #                    glm.vec3(0.3, 0.3, 0.3), glm.vec3(0.4, 0.4, 0.4))
     glColor3ub(157, 150, 142)
     draw_texturized_block_up(0, 2, 0, 1, 0.7, 0.05, textures['base_notebook'])
 
     # tela
     glTranslatef(0, 0.35, 1.15)
     glRotatef(-35, 1, 0, 0)
-
-    # draw_colored_block(0, 2.05, -0.0, 1, 0.03, 0.7,
-    #                    glm.vec3(0.45, 0.45, 0.45), glm.vec3(0.4, 0.4, 0.4),
-    #                    glm.vec3(0.4, 0.4, 0.4), glm.vec3(0.2, 0.2, 0.2),
-    #                    glm.vec3(0.3, 0.3, 0.3), glm.vec3(0.4, 0.4, 0.4))
     glColor3ub(10, 10, 10)
     draw_texturized_block_front(0, 2.05, -0.0, 1, 0.03, 0.7, textures['tela_notebook'])
     glPopMatrix()
@@ -599,10 +548,8 @@ def display():
     global angle, texture_brick, fan_rotation, door_angle, window_angle
     # limpa cor e buffers de profundidade
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
-
     # reseta transformações
     glLoadIdentity()
-    # setup_lighting()
 
     # define camera
     # camx camy camz centerx centery centerz upx upy upz
@@ -713,7 +660,7 @@ def display():
     glScalef(0.6, 1, 0.3)
     glTranslatef(16.2, 0, 33)
     glRotatef(180, 0, 1, 0)
-    draw_wardrobe(0,0,0)
+    draw_wardrobe(0, 0, 0)
     glPopMatrix()
 
     #quadro van gogh
@@ -752,6 +699,7 @@ def display():
     draw_chair(2, 0, -8)
     glPopMatrix()
 
+    #teclado musical
     glPushMatrix()
     glRotatef(-90, 0, 1, 0)
     draw_keyboard(0, 0, -9.6)
@@ -805,40 +753,42 @@ def keyboard_d_keys(key, dx, y):
 
 
 def keyboard(key, x, y):
-    global angle, X, Z, dx, dy, dz, roll, cameraFront, cameraUp, cameraPos, door_angle, window_angle
+    global angle, cameraFront, cameraUp, cameraPos, door_angle, window_angle, light_ambient, light_specular, light_diffuse
 
     cameraSpeed = 0.5
 
     if not isinstance(key, int):
         key = key.decode("utf-8")
-
-    if key == 'w':
-        print("KEYBOARD w", key)
+    #controles da camera
+    if key == 'w' or key == 'W':
         cameraPos += cameraSpeed * cameraFront
-    elif key == 'a':
-        print("KEYBOARD a", key)
+    elif key == 'a' or key == 'A':
         cameraPos -= glm.normalize(glm.cross(cameraFront, cameraUp)) * cameraSpeed
-    elif key == 's':
-        print("KEYBOARD s", key)
+    elif key == 's' or key == 'S':
         cameraPos -= cameraSpeed * cameraFront
-    elif key == 'd':
-        print("KEYBOARD d", key)
+    elif key == 'd' or key == 'D':
         cameraPos += glm.normalize(glm.cross(cameraFront, cameraUp)) * cameraSpeed
-    elif key == 'q':
-        print("KEYBOARD q", key)
+    elif key == 'q' or key == 'Q':
         cameraPos.y += cameraSpeed/2
-    elif key == 'e':
-        print("KEYBOARD e", key)
+    elif key == 'e' or key == 'E':
         cameraPos.y -= cameraSpeed/2
 
+    #abertura da porta
     if key == 'o':
         door_angle += 5
     if key == 'O':
         door_angle -= 5
+    #abertura das janelas
     if key == 'j':
         window_angle += 5
     if key == 'J':
         window_angle -= 5
+    #controle da iluminação
+    if key == 'i':
+        glEnable(GL_LIGHT0)
+    if key == 'I':
+        glDisable(GL_LIGHT0)
+
     glutPostRedisplay()
 
 
@@ -891,12 +841,11 @@ def mouse_camera(mouse_x, mouse_y):
 
 
 def load_texture(image):
-    texid = 0
     textureSurface = pygame.image.load(image)
     textureData = pygame.image.tostring(textureSurface, "RGBA", 1)
     width = textureSurface.get_width()
     height = textureSurface.get_height()
-    # glGenTextures(1, texid)
+
     texid = glGenTextures(1)
 
     glBindTexture(GL_TEXTURE_2D, texid)
@@ -915,19 +864,25 @@ def load_texture(image):
 
     return texid
 
+
 def setup_lighting():
+    glEnable(GL_COLOR_MATERIAL)
+    glEnable(GL_LIGHTING)
+    # glEnable(GL_LIGHT0)
+    glEnable(GL_DEPTH_TEST)
+    glShadeModel(GL_SMOOTH)
+
     glMaterialfv(GL_FRONT, GL_SPECULAR, [0.1, 0.1, 0.1, 1])
 
     glLightModelfv(GL_LIGHT_MODEL_AMBIENT, [0.8, 0.8, 0.8, 1])
     glLightfv(GL_LIGHT0, GL_SPECULAR, [0.7, 0.7, 0.7, 1])
     glLightfv(GL_LIGHT0, GL_DIFFUSE, [0.3, 0.3, 0.3, 1])
-
     glLightfv(GL_LIGHT0, GL_POSITION, [0, 7, 0, 1])
-
 
 
 def main():
     global textures
+
     # inicialização
     glutInit()  # inicia glut
     glutInitDisplayMode(GLUT_DEPTH | GLUT_DOUBLE | GLUT_RGBA)
@@ -935,11 +890,7 @@ def main():
     glutInitWindowSize(WINDOW_WIDHT, WINDOW_HEIGHT)
     window = glutCreateWindow("Myron's Bedroom")
 
-    glEnable(GL_COLOR_MATERIAL)
-    glEnable(GL_LIGHTING)
-    glEnable(GL_LIGHT0)
-    glEnable(GL_DEPTH_TEST)
-    glShadeModel(GL_SMOOTH)
+    #iluminação
     setup_lighting()
 
     #callbacks
@@ -949,8 +900,6 @@ def main():
     glutSpecialFunc(keyboard_d_keys)
     glutMouseFunc(mouse_click)
     glutMotionFunc(mouse_camera)
-
-    # glEnable(GL_DEPTH_TEST)
 
     #textures
     textures['brick'] = load_texture("textures/wall.png")
@@ -969,8 +918,6 @@ def main():
     textures['porta2'] = load_texture("textures/porta2.png")
     textures['wood'] = load_texture("textures/wood.png")
     textures['teclado'] = load_texture("textures/teclado.png")
-
-    # setup_lighting()
 
     glutMainLoop()
 
