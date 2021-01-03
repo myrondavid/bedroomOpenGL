@@ -38,10 +38,16 @@ textures = {
     'quadro2': None,
     'miro': None,
     'tela_notebook': None,
-    'base_notebook': None
+    'base_notebook': None,
+    'porta1':None,
+    'porta2': None,
+    'wood': None,
+    'teclado': None
 }
 
 fan_rotation = 0
+door_angle = 0
+window_angle = 0
 
 half_width = WINDOW_WIDHT / 2
 half_height = WINDOW_HEIGHT / 2
@@ -142,6 +148,21 @@ def draw_texturized_block_front(x, y, z, width, length, height, texture):
     # front side
     glColor3f(1, 1, 1)
     draw_textured_wall(x, y, z+length, x + width, y + height, z + length, texture)
+
+def draw_texturized_block_front_and_back(x, y, z, width, length, height, texture_front, texture_back):
+    #left side
+    draw_wall(x, y, z, x, y + height, z+length)
+    #right side
+    draw_wall(x+width, y, z, x + width, y + height, z + length)
+    #down side
+    draw_floor(x, y, z, width, length)
+    #up side
+    draw_floor(x, y+height, z, width, length)
+    # front side
+    glColor3f(1, 1, 1)
+    draw_textured_wall(x, y, z+length, x + width, y + height, z + length, texture_front)
+    #back side
+    draw_textured_wall(x, y, z, x+width, y + height, z, texture_back)
 
 def draw_texturized_block_up(x, y, z, width, length, height, texture):
     #left side
@@ -550,9 +571,32 @@ def draw_chair(x, y, z):
     glPopMatrix()
 
 
+def draw_keyboard(x, y, z):
+    glPushMatrix()
+    glTranslatef(x, y, z)
+    #teclado
+    glColor3ub(39, 39, 39)
+    draw_texturized_block_up(0, 1.4, 0, 4, 0.9, 0.1, textures['teclado'])
+    #pés
+    glColor3ub(30, 30, 30)
+    glPushMatrix()
+    glTranslatef(1.5, 0.07, 0)
+    glRotatef(-45, 0, 0, 1)
+    draw_block(0, 0, 0, 0.1, 0.2, 2)
+    draw_block(0, 0, 0.7, 0.1, 0.2, 2)
+    glPopMatrix()
+
+    glPushMatrix()
+    glTranslatef(2.5, 0.0, 0)
+    glRotatef(45, 0, 0, 1)
+    draw_block(0, 0, 0, 0.1, 0.2, 2)
+    draw_block(0, 0, 0.7, 0.1, 0.2, 2)
+    glPopMatrix()
+
+    glPopMatrix()
 
 def display():
-    global angle, texture_brick, fan_rotation
+    global angle, texture_brick, fan_rotation, door_angle, window_angle
     # limpa cor e buffers de profundidade
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
 
@@ -580,11 +624,12 @@ def display():
     draw_textured_wall(-10, 0, -10, 10, 7, -10, textures['parede'])
 
     # parede esquerda
-    glColor3ub(181, 177, 163)
+    # glColor3ub(181, 177, 163)
+    glColor3ub(250, 250, 250)
     draw_textured_wall(-10, 0, -10, -10, 7, 10, textures['parede'])
 
     # parede da frente com portas e janelas
-    glColor3ub(200, 200, 200)
+    glColor3ub(221,217,206)
     #part1
     draw_block(-10, 0, 10, 2, 0.4, 7)
     # part 2
@@ -604,6 +649,7 @@ def display():
     # part9
     draw_block(7, 0, 10, 3, 0.4, 5)
 
+
     # alisais esquerdo
     draw_colored_block_fixed(-8, 0, 10, 0.1, 0.4, 5)
     # alisais direito
@@ -611,15 +657,39 @@ def display():
     # alisais topo
     draw_colored_block_fixed(-7.9, 4.9, 10, 2.8, 0.4, 0.1)
 
+    #porta principal
+    # draw_colored_block_fixed(-7.9, 0, 10, 2.8, 0.1, 4.9)
+    glPushMatrix()
+    glTranslatef(-7.9, 0, 10)
+    glRotatef(door_angle, 0, 1, 0)
+    draw_texturized_block_front_and_back(0,0,0, 2.8, 0.1, 4.9, textures['porta1'], textures['porta1'])
+    glPopMatrix()
+
+    #janela 1
+    glPushMatrix()
+    glTranslatef(-3, 6, 10.4)
+    glRotatef(-window_angle, 1, 0, 0)
+    glColor3ub(70, 35, 26)
+    # draw_colored_block_fixed(0, 0, 0, 4, 0.1, -1)
+    draw_texturized_block_front_and_back(0, 0, 0, 4, 0.1, -1, textures['wood'], textures['wood'])
+    glPopMatrix()
+
+    # janela 2
+    glPushMatrix()
+    glTranslatef(4, 5, 10.4)
+    glRotatef(-window_angle, 1, 0, 0)
+    glColor3ub(70, 35, 26)
+    # draw_colored_block_fixed(0, 0, 0, 3, 0.1, -1)
+    draw_texturized_block_front_and_back(0, 0, 0, 3, 0.1, -1, textures['wood'], textures['wood'])
+    glPopMatrix()
+
     # parede direita
-    glColor3ub(201, 197, 183)
+    glColor3ub(245, 245, 245)
     draw_textured_wall(10, 0, -10, 10, 7, 10, textures['parede'])
 
     # teto
     glColor3ub(250, 250, 250)
     draw_textured_floor(-10, 7, -10, 20, 20, textures['teto'])
-
-    glPopMatrix() #pop quarto
 
     #cama 1 com cabeceira
     draw_bed1(-6, 0, -9.99)
@@ -680,6 +750,12 @@ def display():
     draw_chair(2, 0, -8)
     glPopMatrix()
 
+    glPushMatrix()
+    glRotatef(-90, 0, 1, 0)
+    draw_keyboard(0, 0, -9.6)
+    glPopMatrix()
+
+    glPopMatrix()  # pop quarto
 
     glutSwapBuffers()
 
@@ -727,7 +803,7 @@ def keyboard_d_keys(key, dx, y):
 
 
 def keyboard(key, x, y):
-    global angle, X, Z, dx, dy, dz, roll, cameraFront, cameraUp, cameraPos
+    global angle, X, Z, dx, dy, dz, roll, cameraFront, cameraUp, cameraPos, door_angle, window_angle
 
     cameraSpeed = 0.5
 
@@ -752,6 +828,15 @@ def keyboard(key, x, y):
     elif key == 'e':
         print("KEYBOARD e", key)
         cameraPos.y -= cameraSpeed/2
+
+    if key == 'o':
+        door_angle += 5
+    if key == 'O':
+        door_angle -= 5
+    if key == 'j':
+        window_angle += 5
+    if key == 'J':
+        window_angle -= 5
     glutPostRedisplay()
 
 
@@ -860,6 +945,11 @@ def main():
     textures['miro'] = load_texture("textures/classic-miro.jpg")
     textures['tela_notebook'] = load_texture("textures/tela_notebook.png")
     textures['base_notebook'] = load_texture("textures/base_notebook.png")
+    textures['porta1'] = load_texture("textures/porta1.png")
+    textures['porta2'] = load_texture("textures/porta2.png")
+    textures['wood'] = load_texture("textures/wood.png")
+    textures['teclado'] = load_texture("textures/teclado.png")
+
 
 
     glutMainLoop()
