@@ -473,7 +473,7 @@ def draw_fan(x, y, z, rot):
     glColor3ub(100, 100, 100)
     draw_cylinder(0, 0, 0, 1, 0.2) # base
 
-    glColor3ub(120, 120, 120)
+    glColor3ub(60, 60, 60)
     draw_cylinder(0, 0.2, 0, 0.2, 1.5) #haste
 
     glPushMatrix() # motor + helices
@@ -602,12 +602,14 @@ def display():
 
     # reseta transformações
     glLoadIdentity()
+    # setup_lighting()
 
     # define camera
     # camx camy camz centerx centery centerz upx upy upz
     gluLookAt(cameraPos.x, cameraPos.y, cameraPos.z,
               cameraPos.x + cameraFront.x, cameraPos.y + cameraFront.y, cameraPos.z + cameraFront.z,
               cameraUp.x, cameraUp.y, cameraUp.z)
+
     #fixed cam
     # gluLookAt(0, 5, 35,
     #           0, 0, -5,
@@ -913,6 +915,17 @@ def load_texture(image):
 
     return texid
 
+def setup_lighting():
+    glMaterialfv(GL_FRONT, GL_SPECULAR, [0.1, 0.1, 0.1, 1])
+
+    glLightModelfv(GL_LIGHT_MODEL_AMBIENT, [0.8, 0.8, 0.8, 1])
+    glLightfv(GL_LIGHT0, GL_SPECULAR, [0.7, 0.7, 0.7, 1])
+    glLightfv(GL_LIGHT0, GL_DIFFUSE, [0.3, 0.3, 0.3, 1])
+
+    glLightfv(GL_LIGHT0, GL_POSITION, [0, 7, 0, 1])
+
+
+
 def main():
     global textures
     # inicialização
@@ -922,6 +935,13 @@ def main():
     glutInitWindowSize(WINDOW_WIDHT, WINDOW_HEIGHT)
     window = glutCreateWindow("Myron's Bedroom")
 
+    glEnable(GL_COLOR_MATERIAL)
+    glEnable(GL_LIGHTING)
+    glEnable(GL_LIGHT0)
+    glEnable(GL_DEPTH_TEST)
+    glShadeModel(GL_SMOOTH)
+    setup_lighting()
+
     #callbacks
     glutDisplayFunc(display)
     glutReshapeFunc(change_side)
@@ -930,7 +950,7 @@ def main():
     glutMouseFunc(mouse_click)
     glutMotionFunc(mouse_camera)
 
-    glEnable(GL_DEPTH_TEST)
+    # glEnable(GL_DEPTH_TEST)
 
     #textures
     textures['brick'] = load_texture("textures/wall.png")
@@ -950,7 +970,7 @@ def main():
     textures['wood'] = load_texture("textures/wood.png")
     textures['teclado'] = load_texture("textures/teclado.png")
 
-
+    # setup_lighting()
 
     glutMainLoop()
 
