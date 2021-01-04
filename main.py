@@ -23,6 +23,8 @@ angle_y = 1.57
 mouse_speed = 0.1
 mouse_sensitivity = 0.001
 
+lamp_color = glm.vec3(10, 10, 10)
+
 
 #textures
 textures = {
@@ -543,6 +545,27 @@ def draw_keyboard(x, y, z):
 
     glPopMatrix()
 
+
+def draw_lamp(x, y, z, color):
+    glPushMatrix()
+    glTranslatef(x, y, z)
+    glColor3ub(100, 100, 100)
+    draw_cylinder(0, 0, 0, 0.3, 0.1) # base
+
+    glColor3ub(60, 60, 60)
+    draw_cylinder(0, 0.1, 0, 0.05, 0.6) #haste
+
+    glPushMatrix()
+    glColor3ub(80, 80, 80)
+    glTranslatef(0, 0.8, -1.85)
+    glRotatef(90, 1, 0, 0)
+    draw_cylinder(0, 1.7, 0, 0.15, 0.4) # corpo da lampada
+    glColor3f(color.x/255, color.y/255, color.z/255)
+    draw_cylinder(0, 2.1, 0, 0.1, 0.01)  # frente da lampada
+    glPopMatrix()
+
+    glPopMatrix()
+
 def display():
     global angle, texture_brick, fan_rotation, door_angle, window_angle
     # limpa cor e buffers de profundidade
@@ -694,6 +717,8 @@ def display():
     draw_table(1, 0, -9.8)
     #notebook
     draw_notebook(2, 0.1, -9)
+    #luminária
+    draw_lamp(4, 2.1, -9, lamp_color)
     #cadeira
     draw_chair(2, 0, -8)
     glPopMatrix()
@@ -703,6 +728,8 @@ def display():
     glRotatef(-90, 0, 1, 0)
     draw_keyboard(0, 0, -9.6)
     glPopMatrix()
+
+
 
     glPopMatrix()  # pop quarto
 
@@ -752,7 +779,7 @@ def keyboard_d_keys(key, dx, y):
 
 
 def keyboard(key, x, y):
-    global angle, cameraFront, cameraUp, cameraPos, door_angle, window_angle, light_ambient, light_specular, light_diffuse
+    global angle, cameraFront, cameraUp, cameraPos, door_angle, window_angle, light_ambient, light_specular, light_diffuse, lamp_color
 
     cameraSpeed = 0.5
 
@@ -787,6 +814,14 @@ def keyboard(key, x, y):
         glEnable(GL_LIGHT0)
     if key == 'I':
         glDisable(GL_LIGHT0)
+    #controle spotlight
+    if key == 'l':
+        lamp_color = glm.vec3(255, 255, 255)
+        glEnable(GL_LIGHT1)
+    if key == 'L':
+        lamp_color = glm.vec3(10, 10, 10)
+        glDisable(GL_LIGHT1)
+
 
     glutPostRedisplay()
 
@@ -884,11 +919,12 @@ def setup_lighting():
 
 
     #spot light
+    # spot light
     glLightfv(GL_LIGHT1, GL_DIFFUSE, [1, 1, 1, 1])
-    glLightfv(GL_LIGHT1, GL_SPECULAR, [1, 1, 1, 0])
+    glLightfv(GL_LIGHT1, GL_SPECULAR, [1, 1, 1, 1])
 
     glLightfv(GL_LIGHT1, GL_SPOT_DIRECTION, [0, -1, 0])
-    glLightfv(GL_LIGHT1, GL_POSITION, [0, 6, 0, 1])
+    glLightfv(GL_LIGHT1, GL_POSITION, [0, 6, -1])
 
     glLightf(GL_LIGHT1, GL_SPOT_CUTOFF, 20)
     glLightf(GL_LIGHT1, GL_SPOT_EXPONENT, 2.0)
