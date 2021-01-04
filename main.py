@@ -44,7 +44,9 @@ textures = {
     'porta1':None,
     'porta2': None,
     'wood': None,
-    'teclado': None
+    'teclado': None,
+    'tomada1': None,
+    'tomada2': None
 }
 
 fan_rotation = 0
@@ -729,7 +731,9 @@ def display():
     draw_keyboard(0, 0, -9.6)
     glPopMatrix()
 
-
+    #tomadas
+    draw_texturized_block_front(1, 2.5, -9.99, 0.4, 0.02, 0.6, textures['tomada2'])
+    draw_texturized_block_front_and_back(3.5, 3, 9.99, 0.4, 0.02, 0.6, textures['tomada1'], textures['tomada1'])
 
     glPopMatrix()  # pop quarto
 
@@ -973,6 +977,8 @@ def main():
     textures['porta2'] = load_texture("textures/porta2.png")
     textures['wood'] = load_texture("textures/wood.png")
     textures['teclado'] = load_texture("textures/teclado.png")
+    textures['tomada1'] = load_texture("textures/tomada1.png")
+    textures['tomada2'] = load_texture("textures/tomada2.png")
 
     glutMainLoop()
 
