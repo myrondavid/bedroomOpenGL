@@ -1,5 +1,5 @@
 # bedroomOpenGL
-## Quarto modelado com OpenGL
+## Quarto modelado com PyOpenGL
 
 ### Projeto da disciplina de Computação Gráfica do curso de Ciência da Computação IC-UFAL
 ### Professor: Marcelo Costa Oliveira
