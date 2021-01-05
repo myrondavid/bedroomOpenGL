@@ -6,6 +6,8 @@
 ### Dupla: Myron e Cristiano
 #### PLE 2020
 
+Demonstração: https://www.youtube.com/watch?v=rVtttBJ74V4
+
 
 #### Requisitos para rodar:
 - python3 instalado
