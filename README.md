@@ -57,3 +57,25 @@ Mais informações em: https://pypi.org/project/PyGLM/ e https://pypi.org/projec
 - 'j' abre as janelas, 'J' fecha as janelas
 
 O projeto foi desenvolvido com a IDE PyCharm, logo, recomendo o uso do mesmo para modificação ou execução.
+
+
+#### Referências:
+- Movimentação da câmera baseada em: 
+
+http://www.lighthouse3d.com/tutorials/glut-tutorial/keyboard-example-moving-around-the-world/ 
+
+https://learnopengl.com/Getting-started/Camera
+
+- Código das texturas baseado em: 
+
+https://github.com/mdrkb/3D-House-using-OpenGL-and-C-/ 
+
+https://open.gl/textures
+
+https://stackoverflow.com/questions/39194862/opengl-how-do-i-apply-a-texture-to-this-cube
+
+- Iluminação baseada em: 
+
+https://stackoverflow.com/questions/26032332/opengl-glut-spot-light/26033305 
+
+https://github.com/mgleysson/CG_UFAL/tree/master/Projeto_MuseuZG
