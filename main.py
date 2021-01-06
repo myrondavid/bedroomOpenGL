@@ -225,6 +225,7 @@ def draw_cylinder(x, y, z, radius, height):
     c_angle = 0
     angle_stepsize = 0.1
 
+    #desenha cilindro
     glBegin(GL_QUAD_STRIP)
     c_angle = 0
     while c_angle < 2*glm.pi() + 1:
@@ -235,6 +236,7 @@ def draw_cylinder(x, y, z, radius, height):
         c_angle += angle_stepsize
     glEnd()
 
+    #desenha tampa do cilindro
     glBegin(GL_POLYGON)
     c_angle = 0
     while c_angle < 2*glm.pi():
@@ -244,15 +246,7 @@ def draw_cylinder(x, y, z, radius, height):
         c_angle += angle_stepsize
     glEnd()
 
-    glBegin(GL_POLYGON)
-    c_angle = 0
-    while c_angle < 2*glm.pi():
-        px = radius * glm.cos(c_angle)
-        pz = radius * glm.sin(c_angle)
-        glVertex3f(x + px, y + height, z + pz)
-        c_angle += angle_stepsize
-    glEnd()
-
+    #desenha fundo do cilindro
     glBegin(GL_POLYGON)
     c_angle = 0
     while c_angle < 2 * glm.pi():
